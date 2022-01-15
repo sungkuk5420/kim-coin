@@ -13,34 +13,33 @@ type Block struct {
 }
 
 type blockchain struct {
-	Blocks []*Block
+	blocks []*Block
 }
 
 var b *blockchain
 var once sync.Once
-
-func getLastHash() string {
-	totalBlock := len(GetBlockchain().Blocks)
-	if totalBlock == 0 {
-		return ""
-	}
-	return GetBlockchain().Blocks[totalBlock-1].Hash
-}
 
 func (b *Block) calculateHash() {
 	hash := sha256.Sum256([]byte(b.Data + b.PrevHash))
 	b.Hash = fmt.Sprintf("%x", hash)
 }
 
+func getLastHash() string {
+	totalBlocks := len(GetBlockchain().blocks)
+	if totalBlocks == 0 {
+		return ""
+	}
+	return GetBlockchain().blocks[totalBlocks-1].Hash
+}
+
 func createBlock(data string) *Block {
 	newBlock := Block{data, "", getLastHash()}
 	newBlock.calculateHash()
-
 	return &newBlock
 }
 
 func (b *blockchain) AddBlock(data string) {
-	b.Blocks = append(b.Blocks, createBlock(data))
+	b.blocks = append(b.blocks, createBlock(data))
 }
 
 func GetBlockchain() *blockchain {
@@ -54,5 +53,5 @@ func GetBlockchain() *blockchain {
 }
 
 func (b *blockchain) AllBlocks() []*Block {
-	return b.Blocks
+	return b.blocks
 }
