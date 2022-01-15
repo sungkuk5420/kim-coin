@@ -13,18 +13,18 @@ type Block struct {
 }
 
 type blockchain struct {
-	blocks []*Block
+	Blocks []*Block
 }
 
 var b *blockchain
 var once sync.Once
 
 func getLastHash() string {
-	totalBlock := len(GetBlockchain().blocks)
+	totalBlock := len(GetBlockchain().Blocks)
 	if totalBlock == 0 {
 		return ""
 	}
-	return GetBlockchain().blocks[totalBlock-1].Hash
+	return GetBlockchain().Blocks[totalBlock-1].Hash
 }
 
 func (b *Block) calculateHash() {
@@ -40,7 +40,7 @@ func createBlock(data string) *Block {
 }
 
 func (b *blockchain) AddBlock(data string) {
-	b.blocks = append(b.blocks, createBlock(data))
+	b.Blocks = append(b.Blocks, createBlock(data))
 }
 
 func GetBlockchain() *blockchain {
@@ -54,5 +54,5 @@ func GetBlockchain() *blockchain {
 }
 
 func (b *blockchain) AllBlocks() []*Block {
-	return b.blocks
+	return b.Blocks
 }
